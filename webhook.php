@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
 	$entityBody = file_get_contents('php://input');
 	
+	file_put_contents('tmp/log.txt', time() . ": " . $entityBody . "\n", FILE_APPEND);	
+	
 	// do something
 	
 	if (preg_match('/^https:/', $entityBody))
