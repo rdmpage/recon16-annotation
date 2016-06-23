@@ -12,16 +12,26 @@ You can participate in several ways.
 4. Propose queries you’d like the database to answer
 5. Create those queries in the database itself.
 
+## Overview
+
+The hack glues together several tools:
+
+1. https://hypothes.is to make annotations
+2. https://ifttt.com to send the annotations to a central store
+3. http://cloudant.com to analyse the annotations
+
 
 ## Using hypothes.is to annotate papers
+
+![logo](https://github.com/rdmpage/recon16-annotation/raw/master/images/7iUlfzBp.jpg)
 
 If you’ve not used hypothes.is before you will need to create a free account at https://hypothes.is. If you use Chrome you can get the hypothes.is extension, if you use another web browser you can still annotate content using the proxy https://via.hypothes.is
 
 There are various ways to annotate documents. Here are some possibilities:
 
-If a paper mentioned a latitude and longitude pair, select that text, click “annotate” and add the tag “geo”
-In the list of literature cited, select a reference, click “annotate” and in the annotation paste in the DOI of the reference and add the tag “cites”
-If the paper contains a scientific name, select it, click annotate, and add the tag “name”
+1. If a paper mentioned a latitude and longitude pair, select that text, click “annotate” and add the tag “geo”
+2. In the list of literature cited, select a reference, click “annotate” and in the annotation paste in the DOI of the reference and add the tag “cites”
+3. If the paper contains a scientific name, select it, click annotate, and add the tag “name”
 
 There is lots of scope for thinking about what to annotate, and how to use tags and URLs to make the annotations easy to read by machines.
 
@@ -47,15 +57,15 @@ IFTTT will now ask for “that”, in the box saying “Choose Action Channel”
 
 ![Example](https://github.com/rdmpage/recon16-annotation/raw/master/images/Screenshot 2016-06-23 14.22.59.png)
 
-Set the method to “POST”, content type to “application/json”, and body to “EntryUrl”. For the URL paste in: xxxx
+Set the method to “POST”, content type to “application/json”, and body to “EntryUrl”. For the URL paste in: http://bionames.org/~rpage/recon16-annotation/webhook.php . 
 
-The IFTTT recipe will automatically send your annotations to the central database.
+This URL is for a service that reads the annotations received via IFTTT, tries to interpret them where possible (e.g., extract latitude and longitude from geographical coordinates) then sends the annotations to the central store.
 
 ## Central database
 
-The central database for this project is CouchDB, in this case hosted by https://couldant.com (other hosting options are available, such as http://www.iriscouch.com although these may lack some of the features this hack relies on).
+The central database for this project is CouchDB, in this case hosted by https://cloudant.com (other hosting options are available, such as http://www.iriscouch.com although these may lack some of the features this hack relies on).
 
-An account on Cloudant has been created especially for this project with the user name “recon16”. We can create some “views”  to index the data, including a geospatial index to search by geography (Cloudant has an built-in map to display this data on a map).
+An account on Cloudant has been created especially for this project with the user name “recon16” https://recon16.cloudant.com/dashboard.html . We can create some “views”  to index the data, including a geospatial index to search by geography (Cloudant has an built-in map to display this data on a map).
 
 
 
