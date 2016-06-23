@@ -135,8 +135,8 @@ function toPoint($matches)
 function find_points($text)
 {
 	$DEGREES_SYMBOL 		=  '[°|º]';
-	$MINUTES_SYMBOL			= '(\'|’)';
-	$SECONDS_SYMBOL			= '("|\'\'|’’|”)';
+	$MINUTES_SYMBOL			= '(\'|’|′)';
+	$SECONDS_SYMBOL			= '("|\'\'|’’|”|″)';
 	
 	$INTEGER				= '\d+';
 	$FLOAT					= '\d+(\.\d+)?';
@@ -146,7 +146,7 @@ function find_points($text)
 	
 	$LATITUDE_HEMISPHERE 	= '[N|S]';
 	$LONGITUDE_HEMISPHERE 	= '[W|E]';
-	
+		
 	$flanking_length = 50;
 	
 	$results = array();
@@ -378,6 +378,8 @@ function find_points($text)
 if (0)
 {
 	$text = 'MT, Brazil,14º41\'S, 56º15\'W; NUP 2969 (female), reservatório Manso, rio Manso, município de Chapada dos Guimarães, MT, Brazil; NUP 3428 (female), NUP 4136, (male), Baia Sinhá Mariana, tributary to rio Cuiabá, município de Barão de Melgaço, MT, Brazil, 16º20\'20.5\'\'S, 54º54\'10.3\'\'W. Potamotrygon cf. ocellata: MNRJ 10620 (female), rio Pedreira, Macapá, Amapá, Brazil.';
+
+	$text = '8°07′45.73″S, 63°42′09.64″W';
 
 	$results = find_points($text);
 	print_r($results);
