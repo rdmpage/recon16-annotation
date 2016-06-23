@@ -69,6 +69,8 @@ The central database for this project is CouchDB, in this case hosted by https:/
 
 An account on Cloudant has been created especially for this project with the user name “recon16” https://recon16.cloudant.com/dashboard.html . We can create some “views”  to index the data, including a geospatial index to search by geography (Cloudant has an built-in map to display this data on a map).
 
+![map](https://github.com/rdmpage/recon16-annotation/raw/master/images/Screenshot 2016-06-23 15.53.07.png)
+
 ## Example papers to look at
 
 **A new species of shrew (Soricomorpha: Crocidura) from West Java, Indonesia** http://dx.doi.org/10.1644/13-MAMM-A-215 (if you are not using Chrome you can use the proxy https://via.hypothes.is/http://dx.doi.org/10.1644/13-MAMM-A-215
