@@ -47,15 +47,17 @@ If you have a RSS reader you can view this stream, if you don’t there are free
 
 ## Connecting your annotations to a central store
 
-We want to be able to collect annotations and analyse them. To do this we need to connect the annotations streams to a database where we can play with them. One way to do this is to use IFTTT (If This Then That). 
+![ifttt](https://github.com/rdmpage/recon16-annotation/raw/master/images/sC-uTVdd.png)
+
+We want to be able to collect annotations and analyse them. To do this we need to connect the annotations streams to a database where we can play with them. One way to do this is to use IFTTT (If This Then That), a wonderful tool where we can connect pairs of services online to do new things.
 
 Go to https://ifttt.com and either log in or sign up for a free account.
 
 To connect your annotations to the central store, we need to create a recipe that links your annotation RSS feed to a “web hook” that talks to the central store. Click on “My Recipes” then “Create recipe”. Click on “this” and type “rss”. Click on the RSS icon (“Feed”). IFTTT will ask you for a “trigger”, click “New feed item” so that each annotation will trigger and event. It will then ask you for the Feed URL, paste in your feed (https://hypothes.is/stream.rss?user=<username> ) and click “Create Trigger”.
 
-IFTTT will now ask for “that”, in the box saying “Choose Action Channel” type in “maker” and click on the Maker icon. You will see a page like this: 
+IFTTT will now ask for “that”. We are going to use the [Maker Channel](http://blog.ifttt.com/post/121786069098/introducing-the-maker-channel). In the box saying “Choose Action Channel” type in “maker” and click on the Maker icon. You will see a page like this: 
 
-![Example](https://github.com/rdmpage/recon16-annotation/raw/master/images/Screenshot 2016-06-23 14.22.59.png)
+![screenshot](https://github.com/rdmpage/recon16-annotation/raw/master/images/Screenshot 2016-06-23 14.22.59.png)
 
 Set the method to “POST”, content type to “application/json”, and body to “EntryUrl”. For the URL paste in: http://bionames.org/~rpage/recon16-annotation/webhook.php . 
 
@@ -71,4 +73,4 @@ An account on Cloudant has been created especially for this project with the use
 
 **A new species of shrew (Soricomorpha: Crocidura) from West Java, Indonesia** http://dx.doi.org/10.1644/13-MAMM-A-215 (if you are not using Chrome you can use the proxy https://via.hypothes.is/http://dx.doi.org/10.1644/13-MAMM-A-215
 
-
+**A new species of tapir from the Amazon** http://dx.doi.org/10.1644/12-MAMM-A-169.1 [proxy](https://via.hypothes.is/http://dx.doi.org/10.1644/12-MAMM-A-169.1)
