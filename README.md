@@ -37,11 +37,11 @@ There is lots of scope for thinking about what to annotate, and how to use tags 
 
 ## Your annotation stream
 
-Your annotations are stored in hypothes.is. To see them you can visit https://hypothes.is/stream?user=<username> where <username> is your hypothes.is username.
+Your annotations are stored in hypothes.is. To see them you can visit https://hypothes.is/stream?user=**username** where **username** is your hypothes.is username.
 
 hypothes.is also provides the stream in a form we can use together with other services. For example, the stream can be obtained as a RSS feed:
 
-https://hypothes.is/stream.rss?user=<username>
+https://hypothes.is/stream.rss?user=**username**
 
 If you have a RSS reader you can view this stream, if you don’t there are free cloud-based RSS readers such as http://www.inoreader.com
 
