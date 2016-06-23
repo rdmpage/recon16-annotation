@@ -89,6 +89,7 @@ if (0)
 	$url = 'https://hypothes.is/a/Q9YPfjk3Eea2kau3b2M4DQ';
 	
 	$url = 'https://hypothes.is/a/Xs1tFjlDEeav988WRCbyxQ';
+	$url = 'https://hypothes.is/a/rXY93DlkEeaLbeMLB88DJA';
 
 	store_annotation($url);
 }

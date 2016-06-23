@@ -134,7 +134,7 @@ function toPoint($matches)
 // for some strings (depending on encoding), so we compute positions ourselves.
 function find_points($text)
 {
-	$DEGREES_SYMBOL 		=  '[°|º]';
+	$DEGREES_SYMBOL 		=  '[°|º|o]';
 	$MINUTES_SYMBOL			= '(\'|’|′)';
 	$SECONDS_SYMBOL			= '("|\'\'|’’|”|″)';
 	
@@ -380,6 +380,9 @@ if (0)
 	$text = 'MT, Brazil,14º41\'S, 56º15\'W; NUP 2969 (female), reservatório Manso, rio Manso, município de Chapada dos Guimarães, MT, Brazil; NUP 3428 (female), NUP 4136, (male), Baia Sinhá Mariana, tributary to rio Cuiabá, município de Barão de Melgaço, MT, Brazil, 16º20\'20.5\'\'S, 54º54\'10.3\'\'W. Potamotrygon cf. ocellata: MNRJ 10620 (female), rio Pedreira, Macapá, Amapá, Brazil.';
 
 	$text = '8°07′45.73″S, 63°42′09.64″W';
+	
+	// https://via.hypothes.is/http://e-journal.biologi.lipi.go.id/index.php/treubia/article/download/20/25
+	$text = '1o19’ 8.11” S, 120o 6’ 8” E';
 
 	$results = find_points($text);
 	print_r($results);
