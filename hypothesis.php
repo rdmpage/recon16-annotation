@@ -20,12 +20,11 @@ function get_annotation($url)
 
 		$annotation->_id = $annotation->id;
 		
-		print_r($annotation);
+		//print_r($annotation);
 		
-		// get stuff
+		// can we interpret the annotations?
 		
-		//echo "---\n";
-		
+		// get the relevant text, either the user has entered some text or selected some text
 		$text = $annotation->text;
 		if ($text == '')
 		{
@@ -39,7 +38,6 @@ function get_annotation($url)
 				}
 			}
 		}
-		//echo "---\n";
 		
 		// post process
 		foreach ($annotation->tags as $tag)
