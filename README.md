@@ -63,6 +63,8 @@ Set the method to “POST”, content type to “application/json”, and body t
 
 This URL is for a service that reads the annotations received via IFTTT, tries to interpret them where possible (e.g., extract latitude and longitude from geographical coordinates) then sends the annotations to the central store.
 
+Note that you can also use https://ifttt.com/recipes/433627-hypothesis-is-annotations-web-hook as a template.
+
 ## Central database
 
 The central database for this project is CouchDB, in this case hosted by https://cloudant.com (other hosting options are available, such as http://www.iriscouch.com although these may lack some of the features this hack relies on).
