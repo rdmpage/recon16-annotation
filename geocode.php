@@ -2,8 +2,7 @@
 
 // Extract point localities from text
 
-
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 /**
  * @brief Convert a decimal latitude or longitude to deg° min' sec'' format in HTML
  *
@@ -33,7 +32,7 @@ function decimal_to_degrees($decimal)
 	return $result;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 /**
  * @brief Convert decimal latitude, longitude pair to deg° min' sec'' format in HTML
  *
@@ -52,7 +51,7 @@ function format_decimal_latlon($latitude, $longitude)
 	return $html;
 }
 
-//--------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 /**
  * @brief Convert degrees, minutes, seconds to a decimal value
  *
@@ -91,7 +90,7 @@ function degrees2decimal($degrees, $minutes=0, $seconds=0, $hemisphere='N')
 	return $result;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 function toPoint($matches)
 {
 	$feature = new stdclass;
@@ -128,7 +127,7 @@ function toPoint($matches)
 	return $feature;
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Series of regular expressions to extract point localities from text
 // Note that we don't use PREG_OFFSET_CAPTURE as it gives incorrect values
 // for some strings (depending on encoding), so we compute positions ourselves.
@@ -150,6 +149,8 @@ function find_points($text)
 	$flanking_length = 50;
 	
 	$results = array();
+	
+	$line_number = 0;
 	
 	if (preg_match_all("/
 		(?<latitude_degrees>$LATITUDE_DEGREES)
@@ -183,6 +184,7 @@ function find_points($text)
 		
 	/xu",  $text, $matches, PREG_SET_ORDER))
 	{
+		$line_number = __LINE__;
 		//print_r($matches);
 		
 		$last_pos = 0;
@@ -190,6 +192,7 @@ function find_points($text)
 		foreach ($matches as $match)
 		{
 			$hit = new stdclass;
+			$hit->line_number = $line_number;
 			
 			// verbatim text we have matched
 			$hit->mid = $match[0];
@@ -233,6 +236,7 @@ function find_points($text)
 		(?<longitude_hemisphere>$LONGITUDE_HEMISPHERE)		
 	/xu",  $text, $matches, PREG_SET_ORDER))
 	{
+		$line_number = __LINE__;
 		//print_r($matches);
 		
 		$last_pos = 0;
@@ -240,6 +244,7 @@ function find_points($text)
 		foreach ($matches as $match)
 		{
 			$hit = new stdclass;
+			$hit->line_number = $line_number;
 			
 			// verbatim text we have matched
 			$hit->mid = $match[0];
@@ -282,6 +287,7 @@ function find_points($text)
 		$DEGREES_SYMBOL		
 	/xu",  $text, $matches, PREG_SET_ORDER))
 	{
+		$line_number = __LINE__;
 		//print_r($matches);
 		
 		$last_pos = 0;
@@ -289,6 +295,7 @@ function find_points($text)
 		foreach ($matches as $match)
 		{
 			$hit = new stdclass;
+			$hit->line_number = $line_number;
 			
 			// verbatim text we have matched
 			$hit->mid = $match[0];
@@ -335,6 +342,7 @@ function find_points($text)
 		$MINUTES_SYMBOL
 	/xu",  $text, $matches, PREG_SET_ORDER))
 	{
+		$line_number = __LINE__;
 		//print_r($matches);
 		
 		$last_pos = 0;
@@ -342,6 +350,7 @@ function find_points($text)
 		foreach ($matches as $match)
 		{
 			$hit = new stdclass;
+			$hit->line_number = $line_number;
 			
 			// verbatim text we have matched
 			$hit->mid = $match[0];
@@ -383,6 +392,9 @@ if (0)
 	
 	// https://via.hypothes.is/http://e-journal.biologi.lipi.go.id/index.php/treubia/article/download/20/25
 	$text = '1o19’ 8.11” S, 120o 6’ 8” E';
+	
+	// http://jmammal.oxfordjournals.org/content/91/3/566
+	$text = '15 °45′44 ″N, 91 °30″10 ″W'; // broken
 
 	$results = find_points($text);
 	print_r($results);
