@@ -1,0 +1,104 @@
+<html>
+  <head>
+    <script src="jquery.js"></script>
+    <script>
+    
+    </script>
+  </head>
+<body>
+<div id="output"></div>
+
+<script>
+
+var doc = {"updated": "2016-06-24T14:57:30.761874+00:00", "group": "__world__", "target": [{"source": "http://localhost/~rpage/pdf.js-hypothes.is/viewer/web/Hutterer2007lynx.pdf", "selector": [{"type": "TextPositionSelector", "end": 41164, "start": 40988}, {"exact": "HUTTERER R. & KOCK D., 2002: Recent and ancient records of shrews from Syria, with notes on Crocidura katinka Bate, 1937 (Mammalia: Soricidae). Bonn. Zool. Beitr., 50: 249\u2013258.", "prefix": "ress, Baltimore, xxxviii+743 pp.", "type": "TextQuoteSelector", "suffix": "JENKINS P. D., ABRAMOV A. V., RO"}]}], "links": {"json": "https://hypothes.is/api/annotations/-ZrSEDobEeabBevJSaVkOw", "html": "https://hypothes.is/a/-ZrSEDobEeabBevJSaVkOw", "incontext": "https://hyp.is/-ZrSEDobEeabBevJSaVkOw/localhost/~rpage/pdf.js-hypothes.is/viewer/web/Hutterer2007lynx.pdf"}, "tags": ["cites"], "text": "", "created": "2016-06-24T14:57:30.761867+00:00", "uri": "http://localhost/~rpage/pdf.js-hypothes.is/viewer/web/Hutterer2007lynx.pdf", "user": "acct:rdmpage@hypothes.is", "document": {"link": [{"href": "http://localhost/~rpage/pdf.js-hypothes.is/viewer/web/Hutterer2007lynx.pdf"}, {"href": "Hutterer2007lynx.pdf"}, {"href": "urn:x-pdf:38703a7d2a507f45218b2f76aa75ff95"}], "documentFingerprint": ["38703a7d2a507f45218b2f76aa75ff95"], "title": ["untitled"]}, "id": "-ZrSEDobEeabBevJSaVkOw", "permissions": {"read": ["group:__world__"], "admin": ["acct:rdmpage@hypothes.is"], "update": ["acct:rdmpage@hypothes.is"], "delete": ["acct:rdmpage@hypothes.is"]}};
+
+
+
+var html = '';
+
+// get an identifier for this document
+function get_identifier(doc) {
+  var identifier = '';
+  var i = '';
+
+  if (doc.document) {
+ 
+    if (identifier === '') {
+      // highwire
+      if (doc.document.highwire) {
+        for (i in doc.document.highwire) {
+          switch (i) {
+            case 'doi':
+              identifier = doc.document.highwire[i][0];
+              break;
+            case 'pmid':
+              if (identifier === '') {
+                identifier = doc.document.highwire[i][0];
+              }
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+
+   if (identifier === '') {
+      // Dublin Core
+      if (doc.document.dc) {
+        for (i in doc.document.dc) {
+          switch (i) {
+            case 'Identifier':
+              identifier = doc.document.dc[i][0];
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+    
+   if (identifier === '') {
+     if (doc.document.link) {
+      for (var i in doc.document.link) {
+        if (doc.document.link[i].href.match(/urn/)) {
+          identifier = doc.document.link[i].href;
+        }
+      }
+    } 
+    }
+
+
+
+   if (identifier === '') {
+      // URI
+      if (doc.uri) {
+        identifier = doc.uri;
+       }
+    }
+ 
+
+  }
+
+  return identifier;
+} 
+
+
+ {
+  var identifier = get_identifier(doc);
+  if (identifier !== '') {
+   // emit(doc._id, identifier );
+   html += identifier;
+  }
+}
+
+$('#output').html(html);
+  
+
+</script>
+
+
+
+  
+</body>
+</html>
