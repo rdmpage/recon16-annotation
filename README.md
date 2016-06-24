@@ -81,3 +81,12 @@ An account on Cloudant has been created especially for this project with the use
 
 **Potamotrygon boesemani (Chondrichthyes: Myliobatiformes: Potamotrygonidae), a new species of Neotropical freshwater stingray from Surinam** http://dx.doi.org/10.1590/S1679-62252008000100001 [hypothes.is proxy](https://via.hypothes.is/http://dx.doi.org/10.1590/S1679-62252008000100001) (open access)
 
+
+## Things to think about
+
+### Multiple representations of the same article
+The same article may exist as a PDF, as a web page, as an ePub, etc. If two people annotate two different representations of the same article (e.g., one person annotates the PDF, the other the web version in PubMed Central) how discover that those annotations are on the “same” article?
+
+### Processing annotations
+How much post-processing of annotations should we do? For example, should we try and parse a string and convert it to a link to the corresponding entity in a database?
+
