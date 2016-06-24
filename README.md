@@ -98,5 +98,8 @@ http://bionames.org/~rpage/recon16-annotation/www/index.html?id=urn:x-pdf:38703a
 The same article may exist as a PDF, as a web page, as an ePub, etc. If two people annotate two different representations of the same article (e.g., one person annotates the PDF, the other the web version in PubMed Central) how discover that those annotations are on the “same” article?
 
 ### Processing annotations
-How much post-processing of annotations should we do? For example, should we try and parse a string and convert it to a link to the corresponding entity in a database?
+How much post-processing of annotations should we do? For example, should we try and parse a string and convert it to a link to the corresponding entity in a database? Should we use sentence parsers (e.g., http://nlp.stanford.edu:8080/parser/index.jsp ) to try and extract “facts” from the text?
+
+### Automated annotation
+Of course, this approach relies on people annotating articles. It would be much more efficient to automate this process. Given that hypothesis.is provides an API this would be possible, see e.g. http://iphylo.blogspot.co.uk/2015/09/hypothesis-revisited-annotating.html
 
