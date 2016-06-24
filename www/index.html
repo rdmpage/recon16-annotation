@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8" />
+  	<title>Annotation</title>
+  	
+    <style type="text/css">
+      body { margin: 20px; font-family:sans-serif;}
+      input[type="text"] {
+    		font-size:14px;
+	  }
+	  
+	.mydivicon{
+		width: 12px
+		height: 12px;
+		border-radius: 10px;
+		background: #408000; 
+		border: 1px solid #fff;
+		opacity: 0.85
+	}	  
+    </style>
+    
+    <!-- jquery -->
+    <script src="jquery-1.11.2.min.js" type="text/javascript"></script>
+    
+    <!-- leaflet -->
+	<link rel="stylesheet" href="leaflet-0.7.3/leaflet.css" />
+	<script src="leaflet-0.7.3/leaflet.js" type="text/javascript"></script>
+	<script>
+		var map;
+		var geojson = null;
+		
+		// http://gis.stackexchange.com/a/116193
+		// http://jsfiddle.net/GFarkas/qzdr2w73/4/
+		var icon = new L.divIcon({className: 'mydivicon'});		
+
+		//--------------------------------------------------------------------------------
+		function onEachFeature(feature, layer) {
+			// does this feature have a property named popupContent?
+			if (feature.properties && feature.properties.popupContent) {
+				//console.log(feature.properties.popupContent);
+				// content must be a string, see http://stackoverflow.com/a/22476287
+				layer.bindPopup(String(feature.properties.popupContent));
+			}
+		}	
+			
+		//--------------------------------------------------------------------------------
+		function create_map() {
+			map = new L.Map('map');
+
+			// create the tile layer with correct attribution
+			var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+			var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+			var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 12, attribution: osmAttrib});		
+
+			map.setView(new L.LatLng(0, 0),2);
+			map.addLayer(osm);		
+		}
+		
+		//--------------------------------------------------------------------------------
+		function clear_map() {
+			if (geojson) {
+				map.removeLayer(geojson);
+			}
+		}	
+	
+		//--------------------------------------------------------------------------------
+		function add_data(data) {
+			clear_map();
+		
+			geojson = L.geoJson(data, { 
+
+			pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, {
+                    icon: icon});
+            },			
+			style: function (feature) {
+				return feature.properties && feature.properties.style;
+			},
+			onEachFeature: onEachFeature,
+			}).addTo(map);
+			
+			// Open popups on hover
+  			geojson.on('mouseover', function (e) {
+    			e.layer.openPopup();
+  			});
+		
+			if (data.type) {
+				if (data.type == 'Polygon') {
+					for (var i in data.coordinates) {
+					  minx = 180;
+					  miny = 90;
+					  maxx = -180;
+					  maxy = -90;
+				  
+					  for (var j in data.coordinates[i]) {
+						minx = Math.min(minx, data.coordinates[i][j][0]);
+						miny = Math.min(miny, data.coordinates[i][j][1]);
+						maxx = Math.max(maxx, data.coordinates[i][j][0]);
+						maxy = Math.max(maxy, data.coordinates[i][j][1]);
+					  }
+					}
+					
+					bounds = L.latLngBounds(L.latLng(miny,minx), L.latLng(maxy,maxx));
+					map.fitBounds(bounds);
+				}
+				if (data.type == 'MultiPoint') {
+					minx = 180;
+					miny = 90;
+					maxx = -180;
+					maxy = -90;				
+					for (var i in data.coordinates) {
+						minx = Math.min(minx, data.coordinates[i][0]);
+						miny = Math.min(miny, data.coordinates[i][1]);
+						maxx = Math.max(maxx, data.coordinates[i][0]);
+						maxy = Math.max(maxy, data.coordinates[i][1]);
+					}
+					
+					bounds = L.latLngBounds(L.latLng(miny,minx), L.latLng(maxy,maxx));
+					map.fitBounds(bounds);
+				}
+				if (data.type == 'FeatureCollection') {
+					minx = 180;
+					miny = 90;
+					maxx = -180;
+					maxy = -90;				
+					for (var i in data.features) {
+						//console.log(JSON.stringify(data.features[i]));
+					
+						minx = Math.min(minx, data.features[i].geometry.coordinates[0]);
+						miny = Math.min(miny, data.features[i].geometry.coordinates[1]);
+						maxx = Math.max(maxx, data.features[i].geometry.coordinates[0]);
+						maxy = Math.max(maxy, data.features[i].geometry.coordinates[1]);
+						
+					}
+					
+					bounds = L.latLngBounds(L.latLng(miny,minx), L.latLng(maxy,maxx));
+					map.fitBounds(bounds);
+				}
+			}		    					
+		}
+	</script>
+    
+    <script>
+	
+		//http://stackoverflow.com/a/25359264
+		$.urlParam = function(name){
+			var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+			if (results==null){
+			   return null;
+			}
+			else{
+			   return results[1] || 0;
+			}
+		}    
+	
+        //--------------------------------------------------------------------------------
+		// http://stackoverflow.com/a/16976927
+		function ObjectLength_Modern( object ) {
+			return Object.keys(object).length;
+		}
+
+		function ObjectLength_Legacy( object ) {
+			var length = 0;
+			for( var key in object ) {
+				if( object.hasOwnProperty(key) ) {
+					++length;
+				}
+			}
+			return length;
+		}
+
+		var ObjectLength =
+			Object.keys ? ObjectLength_Modern : ObjectLength_Legacy; 
+			
+
+		function document_map(id) {
+			$.getJSON('api.php?document=' + id + "&geojson&callback=?",
+				function(data) {
+				  add_data(data);
+			});
+		
+		}
+		
+		function document_cites(id) {
+			$.getJSON('api.php?document=' + id + "&cites&callback=?",
+				function(data) {
+				  if (data.cites) {
+				    var html = '<ul>';
+				    for (var i in data.cites) {
+				      html += '<li>' + '<a href="http://dx.doi.org/' + data.cites[i] + '" target="_new">' + data.cites[i] + '</a>' + '</li>';
+				    }
+				    html += '</ul>';
+				    $('#cites').html(html);
+				  }
+			});
+		
+		}
+		
+		
+		function document_annotations(id) {
+			$.getJSON('api.php?document=' + id + "&annotations&callback=?",
+				function(data) {
+				  if (data.annotations) {
+				    var html = '<table>';
+				    html += '<tbody style="font-size:12px;">';
+				    html += '<tr><th>user</th><th>id</th><th>tags</th><th>annotation</th></tr>';
+				    for (var i in data.annotations) {
+				      html += '<tr>';
+				      
+				      var user = data.annotations[i].user;
+				      user = user.replace(/acct:/, '');
+				      user = user.replace(/@hypothes.is/, '');
+				      html += '<td>' + user  + '</td>';
+				      
+				      html += '<td>' + '<a href="' + data.annotations[i].link + '" target="_new">' + data.annotations[i].id + '</a>' + '</td>';
+				      html += '<td>' + data.annotations[i].tags.join(',') + '</td>';
+				      
+				      html += '<td>' + data.annotations[i].text + '</td>';
+				      
+				      html += '</tr>';
+				    }
+				    html += '</tbody>';
+				    html += '</table>';
+				    $('#annotations').html(html);
+				  }
+			});
+		
+		}
+		
+		
+		function find(id) {
+			$('#id').html(id);
+		
+			document_map(id);
+			
+			document_cites(id);
+			
+			document_annotations(id);
+			
+			//document_cited_by(id);
+		
+		}
+
+			
+	</script>    
+
+  </head>
+  <body>
+  		<h1 id="id">id</h1>
+  		
+  		<h2>Annotations</h2>
+  		<div id="annotations"></div>
+  		
+		<h2>Map</h2>
+		<p>Map of "geo" annotations</p>
+		<div id="map" style="width:100%; height:300px;"></div>	
+
+		<h2>Literature cited</h2>
+		<div id="cites"></div>
+		
+		
+				
+	<script>
+		// do we have a URL parameter?
+		var document_id = $.urlParam('id');
+		if (document_id) {
+		   document_id = decodeURIComponent(document_id);
+		   find(document_id);
+		}
+		
+				
+		create_map();
+		/*
+		var id = '10.1590/S0031-10492011000800001';
+		id = '10.1371/journal.pone.0083623';
+		
+		$('#id').html(id);
+		
+		document_map(id);
+		*/
+		
+
+	</script>
+
+  </body>
+</html>
