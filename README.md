@@ -77,4 +77,7 @@ An account on Cloudant has been created especially for this project with the use
 
 **A new species of shrew (Soricomorpha: Crocidura) from West Java, Indonesia** http://dx.doi.org/10.1644/13-MAMM-A-215 (if you are not using Chrome you can use the proxy https://via.hypothes.is/http://dx.doi.org/10.1644/13-MAMM-A-215
 
-**A new species of tapir from the Amazon** http://dx.doi.org/10.1644/12-MAMM-A-169.1 [proxy](https://via.hypothes.is/http://dx.doi.org/10.1644/12-MAMM-A-169.1)
+**A new species of tapir from the Amazon** http://dx.doi.org/10.1644/12-MAMM-A-169.1 [hypothes.is proxy](https://via.hypothes.is/http://dx.doi.org/10.1644/12-MAMM-A-169.1) (open access)
+
+**Potamotrygon boesemani (Chondrichthyes: Myliobatiformes: Potamotrygonidae), a new species of Neotropical freshwater stingray from Surinam** http://dx.doi.org/10.1590/S1679-62252008000100001 [hypothes.is proxy](https://via.hypothes.is/http://dx.doi.org/10.1590/S1679-62252008000100001) (open access)
+
