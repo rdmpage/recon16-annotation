@@ -186,7 +186,7 @@
 			$.getJSON('api.php?document=' + id + "&cites&callback=?",
 				function(data) {
 				  if (data.cites) {
-				    var html = '<ul>';
+				    var html = '<ul style="font-size:12px;">';
 				    for (var i in data.cites) {
 				      if (data.cites[i].match(/10\./)) {
 				        var doi = data.cites[i];
