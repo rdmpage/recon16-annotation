@@ -79,7 +79,7 @@ As well as exploring the CouchDB database (not for the faint-hearted) we can cre
 
 http://bionames.org/~rpage/recon16-annotation/www/index.html?id=10.1644/10-MAMM-A-002.1
 
-A locally edited PDF (see https://github.com/hypothesis/pdf.js-hypothes.is ).s
+A locally edited PDF see https://github.com/hypothesis/pdf.js-hypothes.is 
 
 http://bionames.org/~rpage/recon16-annotation/www/index.html?id=urn:x-pdf:38703a7d2a507f45218b2f76aa75ff95
 
