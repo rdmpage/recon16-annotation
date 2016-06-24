@@ -73,7 +73,17 @@ An account on Cloudant has been created especially for this project with the use
 
 ![map](https://github.com/rdmpage/recon16-annotation/raw/master/images/Screenshot 2016-06-23 15.53.07.png)
 
-## Example papers to look at
+## Visualising annotations
+
+As well as exploring the CouchDB database (not for the faint-hearted) we can create some simple visualisations. For example, adding the DOI of a paper to the URL http://bionames.org/~rpage/recon16-annotation/www/index.html?id= gives a crude summary of what the annotations say about a paper. Try it with:
+
+http://bionames.org/~rpage/recon16-annotation/www/index.html?id=10.1644/10-MAMM-A-002.1
+
+A locally edited PDF (see https://github.com/hypothesis/pdf.js-hypothes.is ).s
+
+http://bionames.org/~rpage/recon16-annotation/www/index.html?id=urn:x-pdf:38703a7d2a507f45218b2f76aa75ff95
+
+## Example papers to annotate
 
 **A new species of shrew (Soricomorpha: Crocidura) from West Java, Indonesia** http://dx.doi.org/10.1644/13-MAMM-A-215 (if you are not using Chrome you can use the proxy https://via.hypothes.is/http://dx.doi.org/10.1644/13-MAMM-A-215
 
