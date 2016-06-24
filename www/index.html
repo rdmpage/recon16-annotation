@@ -188,7 +188,13 @@
 				  if (data.cites) {
 				    var html = '<ul>';
 				    for (var i in data.cites) {
-				      html += '<li>' + '<a href="http://dx.doi.org/' + data.cites[i] + '" target="_new">' + data.cites[i] + '</a>' + '</li>';
+				      if (data.cites[i].match(/10\./)) {
+				        var doi = data.cites[i];
+				        doi = doi.replace(/http:\/\/dx.doi.org\//, '');
+				      	html += '<li>' + '<a href="http://dx.doi.org/' + doi + '" target="_new">' + data.cites[i] + '</a>' + '</li>';
+				      } else {
+				      	html += '<li>' + data.cites[i] + '</li>';
+				      }
 				    }
 				    html += '</ul>';
 				    $('#cites').html(html);
