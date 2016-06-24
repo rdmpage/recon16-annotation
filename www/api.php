@@ -109,6 +109,8 @@ function display_document_cites($id, $callback = '')
 	// fetch
 	$obj = new stdclass;
 
+
+	// First pass, query article metadata that hypothes.is has extracted
 	$url = '_design/highwire/_view/reference_doi';	
 	
 	$url .= '?key=' . urlencode('"' . $id . '"');
@@ -152,6 +154,32 @@ function display_document_cites($id, $callback = '')
 			
 		}
 	}
+	
+	// Second pass, query the annotations
+	$url = '_design/representation/_view/identifier_annotation_by_tag';	
+	
+	$url .= '?key=' . urlencode(json_encode(array($id, "cites")));
+
+	/*
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	*/	
+
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+
+	$response_obj = json_decode($resp);
+
+	if (count($response_obj->rows) > 0)
+	{
+		$obj->status = 200;
+		foreach ($response_obj->rows as $row)
+		{
+			$obj->cites[] = $row->value;
+		}
+		$obj->cites = array_unique($obj->cites);
+	}	
 	
 	api_output($obj, $callback);
 }
