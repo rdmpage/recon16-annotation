@@ -33,6 +33,9 @@ $config['couchdb_options'] = array(
 		'prefix' => 'http://'
 		);	
 
+$config['proxy_name'] = '';
+$config['proxy_port'] = '';
+
 		
 // HTTP proxy
 if ($config['proxy_name'] != '')
