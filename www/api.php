@@ -184,6 +184,63 @@ function display_document_cites($id, $callback = '')
 	api_output($obj, $callback);
 }
 
+//--------------------------------------------------------------------------------------------------
+function display_document_tag($id, $tag, $callback = '')
+{
+	global $config;
+	global $couch;
+
+	// fetch
+	$obj = new stdclass;
+
+
+	// annotations with a given tag
+	$url = '_design/representation/_view/identifier_annotation_by_tag';	
+	$url .= '?key=' . urlencode(json_encode(array($id, $tag)));
+
+	/*
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	*/	
+
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+
+	$response_obj = json_decode($resp);
+
+	$obj = new stdclass;
+	$obj->status = 404;
+	$obj->url = $url;
+
+	if (isset($response_obj->error))
+	{
+		$obj->error = $response_obj->error;
+	}
+	else
+	{
+		if (count($response_obj->rows) == 0)
+		{
+			$obj->error = 'Not found';
+		}
+		else
+		{	
+			$obj->status = 200;
+			
+			$obj->results = array();
+
+			foreach ($response_obj->rows as $row)
+			{
+				$obj->results[] = $row->value;
+			}
+			$obj->results = array_unique($obj->results);
+			
+		}
+	}
+	
+	api_output($obj, $callback);
+}
+
 
 //--------------------------------------------------------------------------------------------------
 function display_document_annotations($id, $callback = '')
@@ -310,6 +367,18 @@ function main()
 					$handled = true;
 				}
 			}
+
+			if (!$handled)
+			{
+				if (isset($_GET['name']))
+				{			
+					// list annotations for document
+					display_document_tag($document, 'name', $callback);
+					$handled = true;
+				}
+			}
+
+
 			if (!$handled)
 			{
 				if (isset($_GET['annotations']))
