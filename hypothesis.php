@@ -90,8 +90,36 @@ if (0)
 	
 	$url = 'https://hypothes.is/a/Xs1tFjlDEeav988WRCbyxQ';
 	$url = 'https://hypothes.is/a/rXY93DlkEeaLbeMLB88DJA';
-
-	store_annotation($url);
+	
+	$ids = array(
+'QQnznDraEea1qHts0xaL-g',
+'TfClNDrZEea1pwcGiDwNPQ',
+'V5mCpDrZEea1BFMNEQPuRQ',
+'W3z0BDraEeaMdWNUeKOJDw',
+'Y0UqGDrZEeaHyLdPMVENew',
+'YR7rxDraEeaIxcNcV5xt2g',
+'ZPYPhDraEea1BX-zkQC0UA',
+'aSuwLDraEeaIxofsHrtUiQ',
+'bPUllDraEea1Bk8N0M6WPA',
+'cTssjjraEea1B1_NBTo2VQ',
+'dNa5xjraEea7Ug8V_4sKzQ',
+'eMFsrDraEeaIx-OCY8J3ng',
+'fLrGljraEea1qQOTv8VHxg',
+'fo_4cDrZEeabkR-GvWO2Sw',
+'g6xERDrZEeaqAZPfSmPrzA',
+'iRDO3DrZEeabkncRZe3Ixg',
+'qj3faDraEea1CJdgXUXYcA',
+'rtrDODraEeaMdsszKQ5TLg',
+'uiTPBDraEeaqAneYGMKT7g'
+	);
+	
+	$ids = array('dNa5xjraEea7Ug8V_4sKzQ');
+	
+	foreach ($ids as $id)
+	{
+		$url = 'https://hypothes.is/a/' . $id; 
+		store_annotation($url);
+	}
 }
 
 
