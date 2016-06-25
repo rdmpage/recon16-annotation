@@ -745,13 +745,20 @@ function citeproc_to_openurl (citeproc) {
     switch (j) {
       case 'author':
          for (var k in citeproc[j]) {
-           parameters.push(key_map[j] + '=' + citeproc[j][k]);
+           var author = citeproc[j][k];
+           if (author.literal) {
+             parameters.push(key_map[j] + '=' + author.literal);
+           } else {
+             if (author.family && author.given) {
+               parameters.push(key_map[j] + '=' + author.given + ' ' + author.family);
+            }
+          }
         }
         break;
         
       // just the year
-      case 'date':
-        parameters.push('year' + '=' + citeproc[j][0]);
+      case 'issued':
+        parameters.push('year' + '=' + citeproc[j]['date-parts'][0][0]);
       	break; 
       	
       // eat the issue
@@ -759,19 +766,19 @@ function citeproc_to_openurl (citeproc) {
       	break;
       	
       case 'page':
-        var parts = citeproc[j][0].split(/-/);
+        var parts = citeproc[j].split(/-/);
         if (parts.length > 1) {
           parameters.push('spage' + '=' + parts[0]);
           parameters.push('epage' + '=' + parts[1]);
         } else {
-            parameters.push('pages' + '=' + citeproc[j][0]);
+            parameters.push('pages' + '=' + citeproc[j]);
         }
         break;       
            
       	
       default:
         if (key_map[j]) {
-           parameters.push(key_map[j] + '=' + citeproc[j][0]);
+           parameters.push(key_map[j] + '=' + citeproc[j]);
         }
         break;
     }
@@ -783,18 +790,82 @@ function citeproc_to_openurl (citeproc) {
 
 }
 
+function name_parse(namestring) {
+  var person = {};
+
+  var parts = namestring.match(/^(.*),\s+(Jr\.?)$/);
+  if (parts) {
+    namestring = parts[1];
+    person.suffix = parts[2];
+  }
+
+  parts = namestring.match(/(.*),\s+(.*)/);
+  if (parts) {
+    person.family = parts[1];
+    person.given = parts[2];
+  }
+
+  if (!person.family) {
+    parts = namestring.split(/ /);
+    var n = parts.length;
+    if (n > 1) {
+      person.family = parts[n-1];
+      parts.pop();
+      person.given = parts.join(' ');
+    }
+  }
+
+  // clean up first name, e.g. initials
+  if (person.given) {
+    var matched = false;
+    if (!matched) {
+      parts = person.given.split(/\.\s*/);
+      if (parts.length > 1) {
+        matched = true;
+	    person.given = parts.join(" ");
+	    person.given = person.given.replace(/\s+$/, '');
+      }
+    }
+    if (!matched) {
+      if (person.given.match(/^[A-Z][A-Z]+$/)) {
+        parts = person.given.split("");
+        if (parts) {
+          matched = true;
+	      person.given = parts.join(" ");
+	    }
+	  }
+    }
+    
+  }
+
+  if (person.given) {
+    person.given = person.given.replace(/\s\-/g, '-');
+  }
+
+
+  if (person.family) {
+  } else {
+    person.literal = namestring;
+  }
+
+  return person;
+}
+
+
 //html = doc.uri;
 
 var html = '';
+
 if (doc.document.highwire) {
   if (doc.document.highwire.reference) {
     for (var i in doc.document.highwire.reference) {
-      html += '<li>' + doc.document.highwire.reference[i] + '</li>';
+
+      //html += '<li>' + doc.document.highwire.reference[i] + '</li>';
        
       var s = doc.document.highwire.reference[i];
       s = s.replace(/\n\s+/, '');
-       var p = s.split(/;\s*citation_/);
-       html += p.join("|");
+      var p = s.split(/;\s*citation_/);
+      //html += p.join("|");
       
       var citation = {};
       
@@ -819,22 +890,43 @@ if (doc.document.highwire) {
            case 'pages':
              key = 'page';
              break;
+           case 'year':
+             key = 'issued';
+             break;
            default:
              break;
          }
          
-         /*
-         html += '' + key + '<br />';
-         html += value + '<br />';
-         */
-         if (!citation[key]) {
-           citation[key] = [];
-         }
-         citation[key].push(value);
+         switch (key) {
+           case 'issued':
+             var date = [];
+             date.push(value);
+           
+             citation['issued'] = {};
+             citation['issued']['date-parts'] = [];
+             citation['issued']['date-parts'].push(date);
+             break;
+             
+          case 'author':
+             if (!citation[key]) {
+               citation[key] = [];
+             }
+             var author = name_parse(value);
+             citation[key].push(author);
+             break;
+             
+          default:
+             citation[key] = value;
+             break;
+          
+        }
       }
       html += '<hr />';
+      html += '<div style="font-family:sans-serif">';
       html += JSON.stringify(citation); 
+      html += '</div>';
       citeproc_to_openurl (citation); 
+      
       html += '<hr />'; 
       
       // openurl
