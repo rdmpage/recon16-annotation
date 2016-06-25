@@ -205,6 +205,22 @@
 		
 		}
 		
+
+		function document_openurl(id) {
+			$.getJSON('api.php?document=' + id + "&openurl&callback=?",
+				function(data) {
+				  if (data.results) {
+				    var html = '<ul style="font-size:12px;">';
+				    for (var i in data.results) {
+				      	html += '<li>' + '<a href="http://direct.biostor.org/openurl?' + data.results[i] + '" target="_new">' + data.results[i] + '</a>' + '</li>';
+				    }
+				    html += '</ul>';
+				    $('#unlinked').html(html);
+				  }
+			});
+		
+		}
+		
 		
 		function document_annotations(id) {
 			$.getJSON('api.php?document=' + id + "&annotations&callback=?",
@@ -320,6 +336,8 @@
 			
 			document_cites(id);
 			
+			document_openurl(id);
+			
 			document_annotations(id);
 			
 			document_names(id);
@@ -348,6 +366,9 @@
 
 		<h2>Literature cited</h2>
 		<div id="cites"></div>
+
+		<h2>Unlinked literature</h2>
+		<div id="unlinked"></div>
 		
 		
 				

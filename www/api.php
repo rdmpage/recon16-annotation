@@ -185,6 +185,90 @@ function display_document_cites($id, $callback = '')
 }
 
 //--------------------------------------------------------------------------------------------------
+function display_document_openurl($id, $callback = '')
+{
+	global $config;
+	global $couch;
+
+	// fetch
+	$obj = new stdclass;
+
+
+	// First pass, query article metadata that hypothes.is has extracted
+	
+	$startkey = array($id);
+	$endkey = array($id, new stdclass);
+
+	$url = '_design/highwire/_view/reference_openurl?startkey=' . json_encode($startkey) . '&endkey=' . json_encode($endkey) . '&group_level=2';	
+
+	/*
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	*/	
+
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+
+	$response_obj = json_decode($resp);
+
+	$obj = new stdclass;
+	$obj->status = 404;
+	$obj->url = $url;
+
+	if (isset($response_obj->error))
+	{
+		$obj->error = $response_obj->error;
+	}
+	else
+	{
+		if (count($response_obj->rows) == 0)
+		{
+			$obj->error = 'Not found';
+		}
+		else
+		{	
+			$obj->status = 200;
+			
+			$obj->cites = array();
+
+			foreach ($response_obj->rows as $row)
+			{
+				$obj->results[] = $row->key[1];
+			}
+		}
+	}
+	
+	// Second pass, query the annotations
+	$url = '_design/representation/_view/identifier_annotation_by_tag';	
+	
+	$url .= '?key=' . urlencode(json_encode(array($id, "cites")));
+
+	/*
+	if ($config['stale'])
+	{
+		$url .= '&stale=ok';
+	}	
+	*/	
+
+	$resp = $couch->send("GET", "/" . $config['couchdb_options']['database'] . "/" . $url);
+
+	$response_obj = json_decode($resp);
+
+	if (count($response_obj->rows) > 0)
+	{
+		$obj->status = 200;
+		foreach ($response_obj->rows as $row)
+		{
+			$obj->cites[] = $row->value;
+		}
+		$obj->cites = array_unique($obj->cites);
+	}	
+	
+	api_output($obj, $callback);
+}
+
+//--------------------------------------------------------------------------------------------------
 function display_document_tag($id, $tag, $callback = '')
 {
 	global $config;
@@ -364,6 +448,16 @@ function main()
 				{			
 					// list annotations for document
 					display_document_cites($document, $callback);
+					$handled = true;
+				}
+			}
+			
+			if (!$handled)
+			{
+				if (isset($_GET['openurl']))
+				{			
+					// list annotations for document
+					display_document_openurl($document, $callback);
 					$handled = true;
 				}
 			}
