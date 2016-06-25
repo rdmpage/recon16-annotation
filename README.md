@@ -10,7 +10,8 @@ You can participate in several ways.
 2. Develop standard ways of annotating, perhaps using tags
 3. Connect your hypothes.is account to the central database using https://ifttt.com
 4. Propose queries you’d like the database to answer
-5. Create those queries in the database itself.
+5. Create those queries in the database itself
+6. Propose ways to visualise the annotations
 
 ## Overview
 
